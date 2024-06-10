@@ -22,6 +22,7 @@ The core libraries we're going to use:
 
 Order of execution:
 - Set up version control.
+- Secrets management.
 - Set up dependency management.
 - Set up FastAPI app.
 - Setup DB models.
@@ -29,7 +30,6 @@ Order of execution:
 - Build first API calls - create and get, with tests.
 - Iterate over other entities.
 - Documentation.
-- Secrets management.
 
 ## Things we won't cover
 

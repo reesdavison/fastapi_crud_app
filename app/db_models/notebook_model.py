@@ -1,8 +1,9 @@
 from typing import List
 
-from app.db_models.base import Base
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db_models.base import Base
 
 
 class Notebook(Base):
