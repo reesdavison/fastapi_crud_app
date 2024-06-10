@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.enums import StepType
 
@@ -7,16 +7,16 @@ class NotebookStepBase(BaseModel):
     name: str
     type: StepType
     content: str
-    notebook_id: int
 
 
 class NotebookStepCreate(NotebookStepBase):
-    pass
+    prev_step_index: int | None = Field(default=None)
 
 
 class NotebookStep(NotebookStepBase):
     id: int
     index: int
+    notebook_id: int
 
     class Config:
         orm_mode = True

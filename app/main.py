@@ -32,13 +32,6 @@ async def root():
     return {"message": "Hello World"}
 
 
-# @app.get("/info")
-# async def info(settings: Annotated[AppConfig, Depends(get_app_config)]):
-#     return {
-#         "db_url": settings.DATABASE_URL,
-#     }
-
-
 @app.post("/notebooks/", response_model=schemas.Notebook)
 def create_notebook(notebook: schemas.NotebookCreate, db: Session = Depends(get_db)):
     return crud.create_notebook(db=db, notebook=notebook)
@@ -50,3 +43,21 @@ def read_notebook(notebook_id: int, db: Session = Depends(get_db)):
     if db_notebook is None:
         raise HTTPException(status_code=404, detail="Notebook not found")
     return db_notebook
+
+
+@app.post("/notebooks/{notebook_id}/steps/", response_model=schemas.NotebookStep)
+def create_step_for_notebook(
+    notebook_id: int, step: schemas.NotebookStepCreate, db: Session = Depends(get_db)
+):
+    return crud.create_step(db=db, step=step, notebook_id=notebook_id)
+
+
+@app.get("/notebooks/{notebook_id}/steps/", response_model=list[schemas.NotebookStep])
+def read_steps(notebook_id: int, db: Session = Depends(get_db)):
+    return crud.get_steps(db, notebook_id=notebook_id)
+
+
+# @app.delete("/steps/{step_id}")
+# def delete_step(step_id: int, db: Session = Depends(get_db)):
+#     crud.delete_step(db, step_id=step_id)
+#     return {"message": "Step deleted"}

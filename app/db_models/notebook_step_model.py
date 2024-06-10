@@ -8,10 +8,10 @@ from app.enums import StepType
 class NotebookStepModel(Base):
     __tablename__ = "notebook_step"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String, index=True)
-    index: Mapped[int] = mapped_column(index=True)
-    type: Mapped[StepType] = mapped_column(String, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String)
+    index: Mapped[int] = mapped_column(unique=True)
+    type: Mapped[StepType] = mapped_column(String)
     content: Mapped[str] = mapped_column(String)
     notebook_id: Mapped[int] = mapped_column(ForeignKey("notebook.id"))
     notebook = relationship("NotebookModel", back_populates="steps")
