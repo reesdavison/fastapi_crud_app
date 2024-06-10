@@ -11,8 +11,8 @@ from .notebook_step_model import NotebookStepModel
 class NotebookModel(Base):
     __tablename__ = "notebook"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String)
     steps: Mapped[List["NotebookStepModel"]] = relationship(
         back_populates="notebook", cascade="all, delete-orphan"
     )
