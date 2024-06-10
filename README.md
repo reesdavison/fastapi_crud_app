@@ -4,10 +4,12 @@
 
 The idea is to demonstrate a basic production server application containing
 - Dependency management.
+- Secrets management.
 - A sensible database schema.
 - A database migration framework with tested migrations.
 - A clean API.
 - Application logic.
+- Input validation.
 - Error handling.
 - Test cases.
 - Documentation.
@@ -27,6 +29,11 @@ Order of execution:
 - Build first API calls - create and get, with tests.
 - Iterate over other entities.
 - Documentation.
+- Secrets management.
+
+## Things we won't cover
+
+- Authentication and authorisation.
 
 ## The task
 Manage a set of Jupyter-like "Notebooks" and their "Steps."
