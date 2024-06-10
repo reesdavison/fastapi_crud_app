@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "fastapi-crud-app"
+version = "0.0.0"
+description = ""
+authors = ["Rees Davison <rees.davison@gmail.com>"]
+readme = "README.md"
+packages = [{include = "server/app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+sqlalchemy = "^2.0.30"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
