@@ -31,12 +31,17 @@ Order of execution:
 ## The task
 Manage a set of Jupyter-like "Notebooks" and their "Steps."
 
-## Local dev
-Install `poetry` following instructions
+## Local dev setup
+- Install `poetry` following their [instructions](https://python-poetry.org/docs/#installation).
 
-Install Python environment manager of your choice, and create Python=3.11 environment eg.
+- Install Python environment manager of your choice, and create Python=3.11 environment eg.
 ```sh
 conda create --name fastapicrud python=3.11
 conda activate fastapicrud
+poetry install
 ```
 
+## Add a dependency 
+There's 2 ways:
+1. `poetry add foo`
+2. Add package and version manually to `pyproject.toml` and run `poetry update`.
