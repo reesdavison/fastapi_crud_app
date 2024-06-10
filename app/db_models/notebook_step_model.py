@@ -1,10 +1,11 @@
-from app.db_models.base import Base
-from app.enums import StepType
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.db_models.base import Base
+from app.enums import StepType
 
-class NotebookStep(Base):
+
+class NotebookStepModel(Base):
     __tablename__ = "notebook_step"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
@@ -13,7 +14,7 @@ class NotebookStep(Base):
     type: Mapped[StepType] = mapped_column(String, index=True)
     content: Mapped[str] = mapped_column(String)
     notebook_id: Mapped[int] = mapped_column(ForeignKey("notebook.id"))
-    notebook = relationship("Notebook", back_populates="step")
+    notebook = relationship("NotebookModel", back_populates="steps")
 
     def __repr__(self) -> str:
         return (

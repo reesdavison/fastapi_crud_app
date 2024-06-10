@@ -5,15 +5,17 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db_models.base import Base
 
+from .notebook_step_model import NotebookStepModel
 
-class Notebook(Base):
+
+class NotebookModel(Base):
     __tablename__ = "notebook"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String, index=True)
-    steps: Mapped[List["Step"]] = relationship(
+    steps: Mapped[List["NotebookStepModel"]] = relationship(
         back_populates="notebook", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
-        return f"Notebook(id={self.id!r}, " f"name={self.name!r})"
+        return f"NotebookModel(id={self.id!r}, " f"name={self.name!r})"
