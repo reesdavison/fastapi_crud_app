@@ -57,7 +57,7 @@ def read_steps(notebook_id: int, db: Session = Depends(get_db)):
     return crud.get_steps(db, notebook_id=notebook_id)
 
 
-# @app.delete("/steps/{step_id}")
-# def delete_step(step_id: int, db: Session = Depends(get_db)):
-#     crud.delete_step(db, step_id=step_id)
-#     return {"message": "Step deleted"}
+@app.delete("/steps/{step_id}")
+def delete_step(step_id: int, db: Session = Depends(get_db)):
+    crud.delete_step(db, step_id=step_id)
+    return {"message": "Step deleted"}

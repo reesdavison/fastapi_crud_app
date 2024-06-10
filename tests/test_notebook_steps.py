@@ -170,3 +170,85 @@ def test_insert_step():
     for i, step in enumerate(ordered_steps):
         assert step["index"] == i + 1
         assert step["content"] == str(exp_content[i])
+
+
+def test_insert_past_non_existant_step():
+    # last step is 50
+
+    # first create notebook
+    nb_id = create_notebook()
+
+    # add 10 steps
+    for i in range(10):
+        response = client.post(
+            f"/notebooks/{nb_id}/steps/",
+            json={
+                "name": "foo-bar",
+                "type": "markdown",
+                "content": f"{i + 1}",
+            },
+        )
+        assert response.status_code == 200
+
+    response = client.post(
+        f"/notebooks/{nb_id}/steps/",
+        json={
+            "name": "foo-bar",
+            "type": "markdown",
+            "content": "NEW CONTENT",
+            "prev_step_index": 50,
+        },
+    )
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Cannot insert step at that point"}
+
+
+def test_delete_step():
+    # we delete at step index 5
+
+    # first create notebook
+    nb_id = create_notebook()
+
+    # add 10 steps
+    saved_step_id = None
+    for i in range(10):
+        response = client.post(
+            f"/notebooks/{nb_id}/steps/",
+            json={
+                "name": "f",
+                "type": "markdown",
+                "content": f"{i + 1}",
+            },
+        )
+        assert response.status_code == 200
+        assert response.json()["content"] == f"{i + 1}"
+        assert response.json()["index"] == i + 1
+        assert response.json()["notebook_id"] == nb_id
+        if i == 4:
+            saved_step_id = response.json()["id"]
+
+    response = client.delete(
+        f"/steps/{saved_step_id}",
+    )
+    assert response.status_code == 200
+    assert response.json()["message"] == "Step deleted"
+
+    response = client.get(f"notebooks/{nb_id}/steps/")
+    assert response.status_code == 200
+
+    ordered_steps = response.json()
+    exp_content = [1, 2, 3, 4, 6, 7, 8, 9, 10]
+    for i, step in enumerate(ordered_steps):
+        assert step["index"] == i + 1
+        assert step["content"] == str(exp_content[i])
+
+
+def test_delete_non_existant_step():
+    # hacky but probably ok
+    non_existant_id = 999999999999
+
+    response = client.delete(
+        f"/steps/{non_existant_id}",
+    )
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Step not found"}

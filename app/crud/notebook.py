@@ -16,4 +16,3 @@ def create_notebook(db: Session, notebook: schemas.NotebookCreate) -> dbm.Notebo
     db.commit()
     db.refresh(db_notebook)
     return db_notebook
-    return db_notebook
