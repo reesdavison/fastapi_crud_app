@@ -37,7 +37,6 @@ Order of execution:
 
 ## Future things
 
-- Replace `prev_step_index` with `prev_step_id` in `create_step`.
 - There's more CRUD to be done. delete notebook, reorder steps. It would re-use a lot of the same code.
 - Github action test pipeline
 

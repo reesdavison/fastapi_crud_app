@@ -31,12 +31,13 @@ async def root():
 
 @app.post("/notebooks/", response_model=schemas.Notebook)
 def create_notebook(notebook: schemas.NotebookCreate, db: Session = Depends(get_db)):
-    return crud.create_notebook(db=db, notebook=notebook)
+    notebook = crud.create_notebook(db=db, notebook=notebook)
+    return crud.get_notebook_ordered_steps(db=db, notebook_id=notebook.id)
 
 
 @app.get("/notebooks/{notebook_id}", response_model=schemas.Notebook)
 def read_notebook(notebook_id: int, db: Session = Depends(get_db)):
-    db_notebook = crud.get_notebook(db, notebook_id=notebook_id)
+    db_notebook = crud.get_notebook_ordered_steps(db, notebook_id=notebook_id)
     if db_notebook is None:
         raise HTTPException(status_code=404, detail="Notebook not found")
     return db_notebook

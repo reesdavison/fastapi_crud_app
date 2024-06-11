@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .notebook_step import NotebookStep
 
@@ -12,9 +12,7 @@ class NotebookCreate(NotebookBase):
 
 
 class Notebook(NotebookBase):
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
+
     id: int
     steps: list[NotebookStep] = []
-
-    class Config:
-        orm_mode = True
-        orm_mode = True

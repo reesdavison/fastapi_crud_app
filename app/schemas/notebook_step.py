@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.enums import StepType
 
@@ -14,9 +14,8 @@ class NotebookStepCreate(NotebookStepBase):
 
 
 class NotebookStep(NotebookStepBase):
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
+
     id: int
     index: int
     notebook_id: int
-
-    class Config:
-        orm_mode = True
