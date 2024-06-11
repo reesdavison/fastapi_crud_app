@@ -27,6 +27,15 @@ def get_step(db: Session, step_id: int) -> dbm.NotebookStepModel | None:
     return model
 
 
+def get_step_by_index(db: Session, index: int) -> dbm.NotebookStepModel | None:
+    model = (
+        db.query(dbm.NotebookStepModel)
+        .filter(dbm.NotebookStepModel.index == index)
+        .first()
+    )
+    return model
+
+
 def increment_steps(db: Session, notebook_id: int, step_onwards: int):
     (
         db.query(dbm.NotebookStepModel)
@@ -111,3 +120,44 @@ def delete_step(db: Session, step_id: int):
 
     decrement_steps(db, notebook_id, index)
     db.commit()
+
+
+def move_step(db: Session, step_id: int, move_up: bool = True):
+
+    step = get_step(db, step_id)
+    if step is None:
+        raise HTTPException(status_code=400, detail="That step does not exist")
+
+    index = step.index
+
+    if move_up:
+        if index == 1:
+            # we're the top step already
+            return step
+        switch_index = index - 1
+    else:
+        switch_index = index + 1
+
+    other_step = get_step_by_index(db, switch_index)
+    if other_step is None:
+        # the assumption here is we're already on the last step
+        return step
+
+    # This is performed in a nested transaction to
+    # avoid the DB ending up in a strange state
+    # everything will be rolled back unless it reaches the db.commit()
+    # This faff with the temporary index is to avoid violating
+    # the unique constraint on index
+    temp1 = NOTEBOOK_LIMIT + 1000
+    temp2 = NOTEBOOK_LIMIT + 1001
+    with db.begin_nested():
+        step.index = temp1
+        other_step.index = temp2
+        db.flush()
+        step.index = switch_index
+        other_step.index = index
+        db.flush()
+        db.commit()
+
+    db.commit()
+    return step

@@ -59,3 +59,13 @@ def read_steps(notebook_id: int, db: Session = Depends(get_db)):
 def delete_step(step_id: int, db: Session = Depends(get_db)):
     crud.delete_step(db, step_id=step_id)
     return {"message": "Step deleted"}
+
+
+@app.post("/steps/{step_id}/up", response_model=schemas.NotebookStep)
+def move_step_up_one(step_id: int, db: Session = Depends(get_db)):
+    return crud.move_step(db=db, step_id=step_id, move_up=True)
+
+
+@app.post("/steps/{step_id}/down", response_model=schemas.NotebookStep)
+def move_step_down_one(step_id: int, db: Session = Depends(get_db)):
+    return crud.move_step(db=db, step_id=step_id, move_up=False)
