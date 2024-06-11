@@ -76,3 +76,10 @@ In another terminal, run the dev server with
 ```
 fastapi dev app/main.py
 ```
+
+
+## Production
+We're using docker-compose to serve our app.
+```
+docker-compose up --build
+```

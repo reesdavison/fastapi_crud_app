@@ -9,11 +9,20 @@ services:
       POSTGRES_DB: dbname
     ports:
       - "5432:5432"
-  # web:
-  #   build: .
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - "8000:8000"
-  #   environment:
-  #     DATABASE_URL: postgresql://user:password@db/dbname
+  migrate:
+    build: .
+    depends_on:
+      - db
+    command: migrate upgrade head
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/dbname
+  web:
+    build: .
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+    command: run_app
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/dbname

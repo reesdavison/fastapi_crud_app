@@ -1,3 +1,4 @@
+import os
 import sys
 from functools import lru_cache
 
@@ -10,7 +11,13 @@ from .config import AppConfig
 def get_app_config() -> AppConfig:
     if "pytest" in sys.modules:
         return get_test_config()
-    config = AppConfig.model_validate(dotenv_values(".env"))
+    config = AppConfig.model_validate(
+        {
+            **dotenv_values(".env-defaults"),
+            **dotenv_values(".env"),
+            **os.environ,
+        }
+    )
     return config
 
 
