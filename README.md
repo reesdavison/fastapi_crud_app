@@ -82,6 +82,13 @@ In another terminal, run the dev server with
 fastapi dev app/main.py
 ```
 
+### API Docs
+To view the docs head to
+```
+http://localhost:8000/docs
+```
+Once the app is running.
+
 
 ## Production
 If you just want to build the container
