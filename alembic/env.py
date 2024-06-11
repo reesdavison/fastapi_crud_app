@@ -71,11 +71,15 @@ def run_migrations_online() -> None:
     app_cfg: AppConfig = get_app_config()
     db_url = app_cfg.DATABASE_URL
     config.set_main_option("sqlalchemy.url", db_url)
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+
+    connectable = context.config.attributes.get("connection", None)
+
+    if connectable is None:
+        connectable = engine_from_config(
+            context.config.get_section(context.config.config_ini_section),
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
+        )
 
     with connectable.connect() as connection:
         context.configure(

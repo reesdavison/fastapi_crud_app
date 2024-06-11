@@ -23,3 +23,9 @@ def client(mocker: MockerFixture, postgresql: psycopg.Connection):
 
     mocker.patch("app.main.setup_engine", return_value=engine)
     return TestClient(app)
+
+
+@pytest.fixture
+def alembic_engine(postgresql: psycopg.Connection):
+    """Override this fixture to provide pytest-alembic powered tests with a database handle."""
+    return create_test_sync_engine(postgresql)
