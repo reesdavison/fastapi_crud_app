@@ -35,8 +35,13 @@ Order of execution:
 
 - Authentication and authorisation.
 
+## Future things
+
+- Replace `prev_step_index` with `prev_step_id` in `create_step`.
+- There's more CRUD to be done. delete notebook, reorder steps. It would re-use a lot of the same code.
+
 ## The task
-Manage a set of Jupyter-like "Notebooks" and their "Steps."
+Manage a set of Jupyter like `Notebooks` and their `Steps`.
 
 ## Local dev
 
@@ -79,7 +84,11 @@ fastapi dev app/main.py
 
 
 ## Production
-We're using docker-compose to serve our app.
+If you just want to build the container
+```
+docker build . --tag fastapi_crud_app-web
+```
+If you want to build and run all the services together, we're using docker-compose to serve our app.
 ```
 docker-compose up --build
 ```
