@@ -6,7 +6,7 @@ from app.db_models.base import Base
 
 
 def setup_engine(cfg: AppConfig) -> Engine:
-    engine = create_engine(cfg.DATABASE_URL, connect_args={"check_same_thread": False})
+    engine = create_engine(cfg.DATABASE_URL)
     return engine
 
 

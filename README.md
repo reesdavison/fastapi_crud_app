@@ -57,7 +57,22 @@ There's 2 ways:
 
 
 ### Migrations
+To generate a new migration the simple way after updating the declarative schema:
+```
+alembic revision --autogenerate -m "<message>"
+```
+
 To upgrade the DB to the latest version.
 ```
 alembic upgrade head
+```
+
+### Running in dev mode
+After migrating your DB to the latest. Run postgres in one terminal with
+```
+docker-compose up db
+```
+In another terminal, run the dev server with
+```
+fastapi dev app/main.py
 ```
