@@ -10,7 +10,7 @@ class NotebookStepBase(BaseModel):
 
 
 class NotebookStepCreate(NotebookStepBase):
-    prev_step_index: int | None = Field(default=None)
+    prev_step_id: int | None = Field(default=None)
 
 
 class NotebookStep(NotebookStepBase):

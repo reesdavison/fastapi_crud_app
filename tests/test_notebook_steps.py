@@ -86,7 +86,7 @@ def test_insert_overlimit_steps(client):
         f"/notebooks/{nb_id}/steps/",
         json={
             **get_blob(),
-            "prev_step_index": 50,
+            "prev_step_id": 50,
         },
     )
     assert response.status_code == 400
@@ -153,7 +153,7 @@ def test_insert_step(client):
             "name": "foo-bar",
             "type": "markdown",
             "content": "NEW CONTENT",
-            "prev_step_index": 5,
+            "prev_step_id": 5,
         },
     )
     assert response.status_code == 200
@@ -193,11 +193,11 @@ def test_insert_past_non_existant_step(client):
             "name": "foo-bar",
             "type": "markdown",
             "content": "NEW CONTENT",
-            "prev_step_index": 50,
+            "prev_step_id": 50,
         },
     )
     assert response.status_code == 400
-    assert response.json() == {"detail": "Cannot insert step at that point"}
+    assert response.json() == {"detail": "That step does not exist"}
 
 
 def test_delete_step(client):
