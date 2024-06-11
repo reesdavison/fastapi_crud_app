@@ -13,10 +13,12 @@ sqlalchemy = "^2.0.30"
 python-dotenv = "^1.0.1"
 pydantic = "^2.7.3"
 alembic = "^1.13.1"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.2"
-
+pytest-mock = "^3.14.0"
+pytest-postgresql = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]

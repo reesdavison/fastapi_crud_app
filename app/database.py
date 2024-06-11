@@ -1,7 +1,8 @@
-from app.config import AppConfig
-from app.db_models.base import Base
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
+
+from app.config import AppConfig
+from app.db_models.base import Base
 
 
 def setup_engine(cfg: AppConfig) -> Engine:

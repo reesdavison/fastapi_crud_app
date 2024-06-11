@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db_models.base import Base
@@ -10,11 +10,17 @@ class NotebookStepModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String)
-    index: Mapped[int] = mapped_column(unique=True)
+    index: Mapped[int] = mapped_column()
     type: Mapped[StepType] = mapped_column(String)
     content: Mapped[str] = mapped_column(String)
     notebook_id: Mapped[int] = mapped_column(ForeignKey("notebook.id"))
     notebook = relationship("NotebookModel", back_populates="steps")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "notebook_id", "index", name="_notebookd_id_index_uc", deferrable=True
+        ),
+    )
 
     def __repr__(self) -> str:
         return (

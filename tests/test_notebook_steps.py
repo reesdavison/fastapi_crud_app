@@ -1,9 +1,6 @@
-from fastapi.testclient import TestClient
-
 from app.constants import NOTEBOOK_LIMIT
-from app.main import app
 
-client = TestClient(app)
+from .client_fixture import client  # noqa
 
 
 def get_blob() -> dict:
@@ -14,7 +11,7 @@ def get_blob() -> dict:
     }
 
 
-def create_notebook() -> int:
+def create_notebook(client) -> int:
     response = client.post("/notebooks/", json={"name": "Test Notebook"})
     assert response.status_code == 200
     assert response.json()["name"] == "Test Notebook"
@@ -23,9 +20,9 @@ def create_notebook() -> int:
     return nb_id
 
 
-def test_create_single_notebook_step():
+def test_create_single_notebook_step(client):
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # then create step
     response = client.post(
@@ -40,11 +37,11 @@ def test_create_single_notebook_step():
     assert response.json()["notebook_id"] == nb_id
 
 
-def test_create_overlimit_steps():
+def test_create_overlimit_steps(client):
     # test adding a step to the end after adding incrementally
 
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # then create step
     for i in range(NOTEBOOK_LIMIT):
@@ -69,11 +66,11 @@ def test_create_overlimit_steps():
     }
 
 
-def test_insert_overlimit_steps():
+def test_insert_overlimit_steps(client):
     # test inserting a step in middle when over limit
 
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # then create step
     for i in range(NOTEBOOK_LIMIT):
@@ -98,9 +95,9 @@ def test_insert_overlimit_steps():
     }
 
 
-def test_get_step_order():
+def test_get_step_order(client):
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # add 10 steps
     for i in range(10):
@@ -129,9 +126,9 @@ def test_get_step_order():
         assert step["content"] == str(exp_content[i])
 
 
-def test_insert_step():
+def test_insert_step(client):
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # add 10 steps
     for i in range(10):
@@ -172,11 +169,11 @@ def test_insert_step():
         assert step["content"] == str(exp_content[i])
 
 
-def test_insert_past_non_existant_step():
+def test_insert_past_non_existant_step(client):
     # last step is 50
 
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # add 10 steps
     for i in range(10):
@@ -203,11 +200,11 @@ def test_insert_past_non_existant_step():
     assert response.json() == {"detail": "Cannot insert step at that point"}
 
 
-def test_delete_step():
+def test_delete_step(client):
     # we delete at step index 5
 
     # first create notebook
-    nb_id = create_notebook()
+    nb_id = create_notebook(client)
 
     # add 10 steps
     saved_step_id = None
@@ -243,7 +240,7 @@ def test_delete_step():
         assert step["content"] == str(exp_content[i])
 
 
-def test_delete_non_existant_step():
+def test_delete_non_existant_step(client):
     # hacky but probably ok
     non_existant_id = 999999999999
 

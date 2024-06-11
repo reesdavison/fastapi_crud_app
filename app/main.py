@@ -1,16 +1,12 @@
-from typing import Annotated, Generator
+from typing import Generator
 
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 import app.crud as crud
 import app.schemas as schemas
-from app.config import AppConfig
 from app.database import get_session, setup_engine
-from app.db_models import Base
 from app.env import get_app_config
-
-engine = setup_engine(get_app_config())
 
 # We use alembic to manage table creation so don't use this
 # Base.metadata.create_all(engine)
@@ -19,6 +15,7 @@ app = FastAPI()
 
 
 def get_db() -> Generator[Session, None, None]:
+    engine = setup_engine(get_app_config())
     SessionLocal = get_session(engine)
     db = SessionLocal()
     try:
