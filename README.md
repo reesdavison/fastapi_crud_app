@@ -19,6 +19,7 @@ The core libraries we're going to use:
 - FastAPI
 - SQLAlchemy
 - Alembic
+- Pydantic
 
 Order of execution:
 - Set up version control.
